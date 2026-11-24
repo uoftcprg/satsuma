@@ -297,6 +297,7 @@ namespace satsuma {
                            dejavu_backtrack_limit, track);
             sym.set_reorder(reorder);
             sym.set_order_first(order_first_lit);
+            sym.set_orbitopal_fixing(orbitopal_fixing);   // units where a matrix has ULC rows/columns
             sym.set_log_output(log);
             sym.compute_from_pbf(formula);
             (*log) << std::endl << "c\t [group: #orbits ~= " << sym.n_orbits() << "]";

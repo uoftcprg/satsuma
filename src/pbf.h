@@ -266,6 +266,23 @@ public:
     }
 
     /**
+     * Unique literal clause: the literals form a plain clause of the formula
+     * and none of them occurs (in that polarity) in any other constraint.
+     * This is what orbitopal fixing needs from a row or column.
+     */
+    virtual bool is_ulc(std::vector<int>& clause) {
+        for(auto l : clause) {
+            if(literal_to_number_of_clauses(l) != 1) return false;
+        }
+        static std::vector<std::pair<int, int>> key;
+        key.clear();
+        const int empty = coefftoid("");
+        for(auto l : clause) key.push_back({empty, l});
+        key.push_back({empty, 0});
+        return read_db(key, LEQ);
+    }
+
+    /**
      * Test whether given map is an automorphism of the formula.
      *
      * @param domain_size

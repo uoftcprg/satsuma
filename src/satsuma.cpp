@@ -320,6 +320,8 @@ int commandline_mode(int argc, char **argv) {
             satsuma_preprocessor.set_hypergraph_macros(false);
         } else if((arg == "__BINARY_CLAUSES") || (arg == "__SCHREIER_CUTS")) {
             satsuma_preprocessor.set_binary_clauses(true);
+        } else if((arg == "__KNF_ORBITOPAL")) {
+            satsuma_preprocessor.set_orbitopal_fixing(true);
         } else if((arg == "__ORBITOPAL_FIXING")) {
             satsuma_preprocessor.set_orbitopal_fixing(true);
             satsuma_preprocessor.set_orbitopal_fixing_only(true);
@@ -471,7 +473,9 @@ int commandline_mode(int argc, char **argv) {
 
     // proof logging
     std::ofstream proof_file;
-    proof my_proof(proof_file, formula.n_variables(), proof_format);
+    // KNF and OPB input is read into formula_pb and leaves the CNF object empty,
+    // so the number of variables has to come from the formula that was read
+    proof my_proof(proof_file, file_type==CNF ? formula.n_variables() : formula_pb.n_variables(), proof_format);
     if(use_proof_logging) {
         try {
             proof_file.open(proof_filename);
